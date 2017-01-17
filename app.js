@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const http = require('http');
 const express = require('express');
 const routes = require('./routes/');
+var socketio = require('socket.io');
 
 const app = express();
 app.set('view engine', 'html'); // have res.render work with html files
@@ -13,47 +14,18 @@ app.engine('html', nunjucks.render); // when giving html files to res.render, te
 nunjucks.configure('views', {noCache: true}); // point nunjucks to the proper directory for templates
 
 // app.use(volleyball);
-app.use(function(req, res, next) {
-	// console.log(chalk.blue(req.path.slice(1)));
-	let type = req.method;
-	let code = res.statusCode;
-	let status = http.STATUS_CODES[code];
-	let path = req.url;
-	console.log(type, path, code);
-	next();
-})
-
-app.use('/', routes);
-
-
-// // app.use('/special/', function(req, res, next) {
-// 	console.log(chalk.red('the secret zone'));
+// app.use(function(req, res, next) {
+// 	// console.log(chalk.blue(req.path.slice(1)));
+// 	let type = req.method;
+// 	let code = res.statusCode;
+// 	let status = http.STATUS_CODES[code];
+// 	let path = req.url;
+// 	console.log(type, path, code);
 // 	next();
 // })
-//
-// // app.get('/', function(req, res, next) {
-// // 	res.send('Hello there!');
-// // })
-//
-// app.get('/news', function(req, res, next) {
-// 	res.send("All the news that's fit to print");
-// })
+var router = routes(io)
 
-// let locals = {
-// 	title : 'Twitter-ish',
-// 	people: [
-// 		{ name: 'Jess'},
-// 		{ name: 'Kostas'},
-// 		{ name: 'Mike'}
-// 	]
-// };
-//
-//
-//
-//
-// app.get('/', function(req, res, next) {
-// 	res.render('index', locals);
-// })
-app.listen(3000, function() {
-	console.log('server listening');
-});
+var server = app.listen(3000);
+var io = socketio.listen(server);
+
+app.use('/', router);
