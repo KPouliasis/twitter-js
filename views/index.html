@@ -12,12 +12,12 @@
       100 followers
     </div>
     <div class="col-md-9">
-
+      <ul class = 'list-group'>
       <!-- display tweets here -->
       {% for tweet in tweets %}
-        <li>{{tweet.content}}</li>
+        <li class = 'list-group-item'>{{tweet.content}}</li>
       {% endfor %}
-
+    </ul>
     </div>
   </div>
 
