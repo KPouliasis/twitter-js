@@ -15,10 +15,20 @@
       <ul class = 'list-group'>
       <!-- display tweets here -->
       {% for tweet in tweets %}
-        <li class = 'list-group-item'>{{tweet.content}}</li>
+       <li class = 'list-group-item'><h3><a href = "/users/{{tweet.name}}">{{tweet.name}}</a></h3> {{tweet.content}} </li>
       {% endfor %}
     </ul>
     </div>
   </div>
+  {% if showForm %}
+    <form action="/tweets" method="POST">
+      <label for="name_field">Name:</label>
+      <input name="name" type="text" id="name_field" value = "{{name}}" />
 
+      <label for="text_field">Text:</label>
+      <input name="text" type="text" id="text_field" style="width: 350px;" />
+
+      <input type="submit" value="Submit" />
+    </form>
+  {% endif %}
 {% endblock %}
